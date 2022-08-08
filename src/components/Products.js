@@ -99,7 +99,8 @@ function Products() {
       (!filters.selectedCase || i.case === filters.selectedCase);
   });
 
-  if (requestStatus === REQUEST_STATUS.LOADING) return <Loading />
+  if (requestStatus === REQUEST_STATUS.LOADING) return <Loading />;
+  if (requestStatus === REQUEST_STATUS.ERROR) return <h1>Error...</h1>;
 
   return (
     <div className='flex'>
