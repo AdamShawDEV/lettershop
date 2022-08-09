@@ -41,7 +41,7 @@ function Product({ product }) {
                         onClick={(e) => handleClick(e)}>
                         Add to cart
                     </button>
-                    <Link className='mx-auto hover:underline' to={`/${product.family.replaceAll(' ', '-')}/${product.case}/${product.name}`} >more info</Link>
+                    <Link className='mx-auto hover:underline' to={`/description/${product.id}`} >more info</Link>
                 </div>
             </div>
         </div>

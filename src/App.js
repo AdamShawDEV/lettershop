@@ -14,11 +14,11 @@ function App() {
       <Router>
         <div className="min-h-full bg-slate-400">
           <Header />
-          <main className="bg-slate-400 min-h-full">
+          <main className="min-h-full w-full">
             <Routes>
               <Route path="/" element={<Products />} />
               <Route path="/Cart/" element={<Cart />} />
-              <Route path="/:family/:case/:letter" element={<ProductDescription />} />
+              <Route path="/description/:id" element={<ProductDescription />} />
               <Route path="/checkout" element={<Checkout />} />
             </Routes>
           </main>

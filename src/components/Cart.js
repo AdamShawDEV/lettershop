@@ -75,7 +75,7 @@ function Cart() {
     }, 0)
 
     return (
-        <div className='p-2 w-3/5'>
+        <div className='p-2 lg:w-3/5 lg:mx-auto'>
             <h1 className='text-2xl font-semibold'>
                 {`You have ${numItems()} item${numItems() > 1 ? 's' : ''} in your cart.`}
             </h1>
@@ -88,11 +88,12 @@ function Cart() {
                 )}
             </div>
             <div className='border-t-2 border-slate-800 text-right font-semibold text-black text-2xl'>
-                    Total: $ {total.toFixed(2)}
+                Total: $ {total.toFixed(2)}
+                <button className='bg-blue-500 m-2 p-2 rounded-md hover:bg-blue-300 font-semibold disabled:bg-slate-700'
+                    onClick={() => navigate("/checkout")}
+                    disabled={!cart.length}>check out</button>
             </div>
-            <button className='bg-blue-500 p-2 rounded-md hover:bg-blue-300 font-semibold disabled:bg-slate-700'
-                onClick={() => navigate("/checkout")}
-                disabled={!cart.length}>check out</button>
+
         </div>
 
     );

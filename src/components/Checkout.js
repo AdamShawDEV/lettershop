@@ -36,20 +36,32 @@ function ThanksMessage() {
 
 function Checkout() {
     const [address, setAddress] = useState(defaultAddressObject);
-    const [error, setError] = useState({});
     const [formState, setFormState] = useState(FORM_STATE.IDLE);
     const { clearCart } = useContext(CartContext);
+    const [ fieldTouched, setFieldTouched] = useState({});
+
+    const errors = checkForm();
+    const isFormValid = Object.keys(errors).length === 0;
 
     function handleChange(e) {
         setAddress((curr) => {
             return { ...curr, [e.target.id]: e.target.value };
         });
+    }
 
-        if (!e.target.value) {
-            setError((curr) => {
-                return { ...curr, [e.target.id]: `Invalid ${e.target.id}` };
-            });
-        }
+    function handleBlur(e) {
+        setFieldTouched((curr) => {
+            return {...curr, [e.target.id]: true};
+        });
+
+    }
+
+    function checkForm() {
+        let output = {};
+        if (!address.city) output.city = "City is a required.";
+        if (!address.country) output.country = "Country is required";
+
+        return output;
     }
 
     function handleSubmit(e) {
@@ -57,39 +69,63 @@ function Checkout() {
 
         setFormState(FORM_STATE.SUBMITTING);
 
-        if (!Object.keys(error).length) {
+        if (isFormValid) {
             clearCart();
+            // save shipping address
             setFormState(FORM_STATE.COMPLETE);
+        } else {
+            setFormState(FORM_STATE.SUBMITTED);
         }
+    }
+
+    function handleClear(e) {
+        e.preventDefault();
+
+        setFieldTouched({});
+        setAddress(defaultAddressObject);
+        setFormState(FORM_STATE.IDLE);
     }
 
     if (formState === FORM_STATE.COMPLETE) return <ThanksMessage />
 
     return (
-        <div>
-            <h1>Please fill in your address infomation.</h1>
-            {formState === FORM_STATE.SUBMITTING && Object.keys(error).length > 0 &&
-                <div>
+        <div className='w-full sm:mx-auto xl:w-2/5 sm:w-3/5 px-4'>
+            <h1 className='text-2xl font-semibold'>Please fill in your address infomation.</h1>
+            {!isFormValid && formState ===  FORM_STATE.SUBMITTED &&
+                <div className='text-red-700 font-semibold text-xl'>
                     Please fix the following errors:
                     <ul>
-                        {Object.keys(error).map((i) =>
-                            <li key={i}>{error[i]}</li>
+                        {Object.keys(errors).map((i) =>
+                            <li className='list-disc ml-4' key={i}>{errors[i]}</li>
                         )}
                     </ul>
                 </div>
             }
-            <form onSubmit={handleSubmit} className='flex flex-col '>
-                <label>City:</label>
+            <form onSubmit={handleSubmit} className='flex flex-col'>
+                <label className='font-semibold'>City:</label>
+                <p className='text-red-700'>
+                    {(fieldTouched.city || formState === FORM_STATE.SUBMITTED) && errors.city}
+                </p>
                 <input type='text'
                     id='city'
                     value={address.city}
-                    onChange={(e) => handleChange(e)} />
-                <label>Country:</label>
+                    onChange={(e) => handleChange(e)}
+                    onBlur={(e) => handleBlur(e)} />
+                <label className='font-semibold'>Country:</label>
+                <p className='text-red-700'>
+                {(fieldTouched.country || formState === FORM_STATE.SUBMITTED) && errors.country}
+                </p>
                 <input type='text'
                     id='country'
                     value={address.country}
-                    onChange={(e) => handleChange(e)} />
-                <input type='submit' value='Submit' />
+                    onChange={(e) => handleChange(e)}
+                    onBlur={(e) => handleBlur(e)} />
+                <div>
+                    <input className='bg-blue-500 m-2 p-2 rounded-md hover:bg-blue-300 font-semibold disabled:bg-slate-700 w-fit'
+                    disabled={formState === FORM_STATE.SUBMITTING}
+                    type='submit' value='Submit' />
+                    <button className='hover:underline' onClick={(e) => handleClear(e)}>clear</button>
+                </div>
             </form>
         </div>
 
