@@ -5,8 +5,18 @@ const CartContext = createContext();
 function CartContextProvider({ children }) {
     const [cart, setCart] = useState([]);
 
+    function numItems() {
+        return cart.reduce((prev, curr) =>
+            prev + curr.quantity
+        , 0)
+    }
+
+    function clearCart() {
+        setCart([]);
+    }
+
     return (
-        <CartContext.Provider value={{cart, setCart}}>
+        <CartContext.Provider value={{cart, setCart, numItems, clearCart}}>
             {children}
         </CartContext.Provider>
     );
