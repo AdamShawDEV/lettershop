@@ -18,9 +18,11 @@ function CartItem({ id, quantity, data, remove, changeQuantity }) {
         }
     }
 
+    const imgUrl = `../images/${data.family.replaceAll(' ', '-')}-${data.case}-${data.name}.png`;
+
     return (
         <div className='rounded-lg overflow-hidden flex h-20 bg-slate-500'>
-            <img className="" src="http://placehold.jp/150.png" alt='product' />
+            <img className="" src={imgUrl} alt='product' />
             <div className="w-96 p-2">
                 <h2 className="font-semibold" >{`${data.case[0].toUpperCase() + data.case.slice(1)}case ${data.name}`}</h2>
                 <p>{data.family}</p>
