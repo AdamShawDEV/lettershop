@@ -1,11 +1,14 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from './hooks/cartContext';
 
 function Product({ product }) {
     const { setCart } = useContext(CartContext);
+    const navigate = useNavigate();
 
-    function handleClick(e) {
+    function handleAddButton(e) {
+        e.stopPropagation();
+
         setCart((currentCart => {
             const itemAlreadyInCart = currentCart.find((i) =>
                 i.id === product.id
@@ -23,8 +26,14 @@ function Product({ product }) {
         }));
     }
 
+    function onClick(e) {
+        e.stopPropagation();
+        navigate(`/description/${product.id}`);
+    }
+
     return (
-        <div className='w-56 overflow-hidden bg-slate-300 rounded-xl h-fit'>
+        <div className='w-56 overflow-hidden bg-slate-300 rounded-xl h-fit hover:scale-105 hover:shadow-2xl cursor-pointer'
+        onClick={(e) => onClick(e)}>
             <div>
                 <img className="w-full" src="http://placehold.jp/150.png" alt='product' />
             </div>
@@ -38,7 +47,7 @@ function Product({ product }) {
                 </div> */}
                 <div className='flex justify-between items-center'>
                     <button className='bg-blue-500 p-2 rounded-md hover:bg-blue-300 font-semibold'
-                        onClick={(e) => handleClick(e)}>
+                        onClick={(e) => handleAddButton(e)}>
                         Add to cart
                     </button>
                     <Link className='mx-auto hover:underline' to={`/description/${product.id}`} >more info</Link>
