@@ -31,14 +31,18 @@ function ThanksMessage() {
         }
     }, [remainingTime]);
 
-    return <h1>Thanks for shopping! {remainingTime}</h1>;
+    return (
+        <div className='w-full flex justify-center'>
+            <h1 className='m-96 text-3xl'>Thanks for shopping! {remainingTime}</h1>
+        </div>
+    );
 }
 
 function Checkout() {
     const [address, setAddress] = useState(defaultAddressObject);
     const [formState, setFormState] = useState(FORM_STATE.IDLE);
     const { clearCart } = useContext(CartContext);
-    const [ fieldTouched, setFieldTouched] = useState({});
+    const [fieldTouched, setFieldTouched] = useState({});
 
     const errors = checkForm();
     const isFormValid = Object.keys(errors).length === 0;
@@ -51,7 +55,7 @@ function Checkout() {
 
     function handleBlur(e) {
         setFieldTouched((curr) => {
-            return {...curr, [e.target.id]: true};
+            return { ...curr, [e.target.id]: true };
         });
 
     }
@@ -91,7 +95,7 @@ function Checkout() {
     return (
         <div className='w-full sm:mx-auto xl:w-2/5 sm:w-3/5 px-4'>
             <h1 className='text-2xl font-semibold'>Please fill in your address infomation.</h1>
-            {!isFormValid && formState ===  FORM_STATE.SUBMITTED &&
+            {!isFormValid && formState === FORM_STATE.SUBMITTED &&
                 <div className='text-red-700 font-semibold text-xl'>
                     Please fix the following errors:
                     <ul>
@@ -113,7 +117,7 @@ function Checkout() {
                     onBlur={(e) => handleBlur(e)} />
                 <label className='font-semibold'>Country:</label>
                 <p className='text-red-700'>
-                {(fieldTouched.country || formState === FORM_STATE.SUBMITTED) && errors.country}
+                    {(fieldTouched.country || formState === FORM_STATE.SUBMITTED) && errors.country}
                 </p>
                 <input type='text'
                     id='country'
@@ -122,8 +126,8 @@ function Checkout() {
                     onBlur={(e) => handleBlur(e)} />
                 <div>
                     <input className='bg-blue-500 m-2 p-2 rounded-md hover:bg-blue-300 font-semibold disabled:bg-slate-700 w-fit'
-                    disabled={formState === FORM_STATE.SUBMITTING}
-                    type='submit' value='Submit' />
+                        disabled={formState === FORM_STATE.SUBMITTING}
+                        type='submit' value='Submit' />
                     <button className='hover:underline' onClick={(e) => handleClear(e)}>clear</button>
                 </div>
             </form>

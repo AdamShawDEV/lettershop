@@ -190,6 +190,16 @@ const delay = (numSecs = 2000) => new Promise((resolve) => setTimeout(resolve, n
 
 async function requestAll() {
     await delay();
+    // shuffle array
+    for (let i = 0; i < tempData.length; i++)
+    {
+        let idx1 = Math.floor(Math.random() * tempData.length);
+        let idx2 = Math.floor(Math.random() * tempData.length);
+        let temp = tempData[idx1];
+        tempData[idx1] = tempData[idx2];
+        tempData[idx2] = temp;
+    }
+
     return tempData;
 }
 

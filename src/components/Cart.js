@@ -23,26 +23,28 @@ function CartItem({ id, quantity, data, remove, changeQuantity }) {
     return (
         <div className='rounded-lg overflow-hidden flex h-20 bg-slate-500'>
             <img className="" src={imgUrl} alt='product' />
-            <div className="w-96 p-2">
+            <div className="w-96 p-2 flex-grow">
                 <h2 className="font-semibold" >{`${data.case[0].toUpperCase() + data.case.slice(1)}case ${data.name}`}</h2>
                 <p>{data.family}</p>
             </div>
-            <div className='flex items-center'>
-                <label className='pr-2'>Quantity: </label>
-                <select onChange={(e) => handleQuantityChange(e)} value={quantitySelect}>
-                    <option value='0'>0</option>
-                    <option value='1'>1</option>
-                    <option value='2'>2</option>
-                    <option value='3'>3</option>
-                    <option value='4'>4</option>
-                    <option value='5'>5</option>
-                    <option value='6'>6</option>
-                    <option value='7'>7</option>
-                    <option value='8'>8</option>
-                    <option value='9'>9</option>
-                </select>
+            <div className='flex flex-col sm:flex-row py-4 sm:py-0'>
+                <div className='flex items-center sm:p-10'>
+                    <label className='pr-2'>Quantity: </label>
+                    <select onChange={(e) => handleQuantityChange(e)} value={quantitySelect}>
+                        <option value='0'>0</option>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                        <option value='5'>5</option>
+                        <option value='6'>6</option>
+                        <option value='7'>7</option>
+                        <option value='8'>8</option>
+                        <option value='9'>9</option>
+                    </select>
+                </div>
+                <small className='w-36 m-auto'>{`${data.price} x ${quantity} = $ ${(data.price * quantity).toFixed(2)}`}</small>
             </div>
-            <small className='w-36 m-auto '>{`${data.price} x ${quantity} = $ ${(data.price * quantity).toFixed(2)}`}</small>
             <button className='bg-blue-500 p-1 rounded-md hover:bg-red-600 font-semibold self-start h-8 w-8' onClick={remove}>X</button>
         </div>
     );
@@ -77,7 +79,7 @@ function Cart() {
     }, 0)
 
     return (
-        <div className='p-2 lg:w-3/5 lg:mx-auto'>
+        <div className='p-2 2xl:w-3/6 lg:w-2/3 lg:mx-auto'>
             <h1 className='text-2xl font-semibold'>
                 {`You have ${numItems()} item${numItems() > 1 ? 's' : ''} in your cart.`}
             </h1>
