@@ -3,27 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from './hooks/cartContext';
 
 function Product({ product }) {
-    const { setCart } = useContext(CartContext);
+    const { add } = useContext(CartContext);
     const navigate = useNavigate();
 
     function handleAddButton(e) {
         e.stopPropagation();
 
-        setCart((currentCart => {
-            const itemAlreadyInCart = currentCart.find((i) =>
-                i.id === product.id
-            );
-            if (itemAlreadyInCart) {
-                return currentCart.map((i) =>
-                    i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
-                );
-            } else {
-                return [...currentCart, {
-                    id: product.id,
-                    quantity: 1,
-                }]
-            }
-        }));
+        add(product.id);
     }
 
     function onClick(e) {

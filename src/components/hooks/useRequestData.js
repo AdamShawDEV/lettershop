@@ -29,6 +29,7 @@ function useRequestData(id = null) {
     }
 
     getData();
+    // eslint-disable-next-line
   }, []);
 
   return { data, requestStatus };

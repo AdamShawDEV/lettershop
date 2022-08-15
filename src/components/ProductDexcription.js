@@ -9,28 +9,13 @@ import utils from "./tools/utils";
 function ProductDescription() {
     const { id } = useParams();
     const { data, requestStatus } = useRequestData(id);
-    const { setCart } = useContext(CartContext);
+    const { add } = useContext(CartContext);
     const navigate = useNavigate();
-    const [quantity, setQuantity ] = useState(1);
+    const [quantity, setQuantity] = useState(1);
 
     function handleClick(e) {
-        setCart((currentCart => {
-            const itemAlreadyInCart = currentCart.find((i) =>
-                i.id === data.id
-            );
-            if (itemAlreadyInCart) {
-                return currentCart.map((i) =>
-                    i.id === data.id ? { ...i, quantity: i.quantity + Number.parseInt(quantity) } : i
-                );
-            } else {
-                return [...currentCart, {
-                    id: data.id,
-                    quantity: Number.parseInt(quantity),
-                }]
-            }
-        }));
+        add(id, quantity);
 
-        console.log('sdsdsd');
         navigate('/cart');
     }
 
@@ -55,7 +40,8 @@ function ProductDescription() {
                 </div>
                 <div className='text-right space-x-2'>
                     <label>Select quantity: </label>
-                    <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
+                    <select value={quantity}
+                        onChange={(e) => setQuantity(Number.parseInt(e.target.value))}>
                         {utils.range(1, 100).map((i) =>
                             <option key={i} value={i}>{i}</option>
                         )}
