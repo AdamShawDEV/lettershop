@@ -3,6 +3,7 @@ import { CartContext } from './hooks/cartContext';
 import useRequestData, { REQUEST_STATUS } from './hooks/useRequestData';
 import Loading from "./Loading";
 import { useNavigate } from 'react-router-dom';
+import utils from './tools/utils';
 
 function CartItem({ id, quantity, data, remove, changeQuantity }) {
     const [quantitySelect, setQuantitySelect] = useState(quantity);
@@ -31,16 +32,9 @@ function CartItem({ id, quantity, data, remove, changeQuantity }) {
                 <div className='flex items-center sm:p-10'>
                     <label className='pr-2'>Quantity: </label>
                     <select onChange={(e) => handleQuantityChange(e)} value={quantitySelect}>
-                        <option value='0'>0</option>
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                        <option value='6'>6</option>
-                        <option value='7'>7</option>
-                        <option value='8'>8</option>
-                        <option value='9'>9</option>
+                        {utils.range(0, 100).map((i) => 
+                        <option key={i} value={i}>{i}</option>
+                        )}
                     </select>
                 </div>
                 <small className='w-36 m-auto'>{`${data.price} x ${quantity} = $ ${(data.price * quantity).toFixed(2)}`}</small>

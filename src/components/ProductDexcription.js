@@ -4,6 +4,7 @@ import useRequestData, { REQUEST_STATUS } from "./hooks/useRequestData";
 import Loading from "./Loading";
 import { CartContext } from './hooks/cartContext';
 import { useNavigate } from 'react-router-dom';
+import utils from "./tools/utils";
 
 function ProductDescription() {
     const { id } = useParams();
@@ -34,14 +35,10 @@ function ProductDescription() {
     }
 
     if (requestStatus === REQUEST_STATUS.LOADING) return <Loading />;
+    if (!data) return <h1>Product not found!</h1>;
     if (requestStatus === REQUEST_STATUS.ERROR) return <h1>Error</h1>;
 
     const imgUrl = `../images/${data.family.replaceAll(' ', '-')}-${data.case}-${data.name}.png`;
-
-    let start = 1;
-    const quantities = Array.from({ length: 100}, (_,i) => start + i);
-
-    console.log(quantities);
 
     return (
         <div className='mx-auto bg-slate-300 max-w-6xl'>
@@ -59,7 +56,7 @@ function ProductDescription() {
                 <div className='text-right space-x-2'>
                     <label>Select quantity: </label>
                     <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
-                        {quantities.map((i) =>
+                        {utils.range(1, 100).map((i) =>
                             <option key={i} value={i}>{i}</option>
                         )}
                     </select>
