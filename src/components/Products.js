@@ -1,6 +1,6 @@
 import ProductList from "./ProductList";
 import Filter from "./Filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "./Loading";
 import useRequestData, { REQUEST_STATUS } from "./hooks/useRequestData";
 
@@ -35,6 +35,7 @@ function Products() {
         availableLetters={availableLetters}
         availableFamilies={availableFamilies}
         maxPrice={maxPrice}
+        filters={filters}
         setFilters={setFilters} />
       <ProductList filteredProducts={filteredProducts} />
     </div>

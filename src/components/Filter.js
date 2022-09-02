@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Loading from './Loading';
 
 function Checkbox({ value, selectedFamilies, changeHandler }) {
     return (
@@ -12,39 +13,44 @@ function Checkbox({ value, selectedFamilies, changeHandler }) {
     );
 }
 
-function Filter({ setFilters, availableLetters, availableFamilies, maxPrice }) {
-    const [formData, setFormData] = useState({
-        selectedLetter: '',
-        selectedMaxPrice: maxPrice,
-        selectedFamilies: availableFamilies,
-        selectedCase: '',
-    });
+function Filter({ setFilters, filters, availableLetters, availableFamilies, maxPrice }) {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setFilters({
+            selectedLetter: '',
+            selectedMaxPrice: maxPrice,
+            selectedFamilies: availableFamilies,
+            selectedCase: '',
+        });
+        setLoading(false);
+    }, []);
 
     function changeHandler(e) {
-
-        let newFilterData = null;
-
-        if (e.target.id === 'selectedFamilies') {
-            if (formData.selectedFamilies.includes(e.target.value)) {
-                const newArray = formData.selectedFamilies.filter((i) => i !== e.target.value);
-                newFilterData = { ...formData, selectedFamilies: newArray };
+        setFilters((current) => {
+            if (e.target.id === 'selectedFamilies') {
+                if (current.selectedFamilies.includes(e.target.value)) {
+                    const newArray = current.selectedFamilies.filter((i) => i != e.target.value);
+                    return { ...current, selectedFamilies: newArray };
+                } else {
+                    return { ...current, selectedFamilies: [...current.selectedFamilies, e.target.value] };
+                }
             } else {
-                newFilterData = { ...formData, selectedFamilies: [...formData.selectedFamilies, e.target.value] };
+                return { ...current, [e.target.id]: e.target.value };
             }
-        } else {
-            const newData = { ...formData, [e.target.id]: e.target.value };
-            newFilterData = newData;
-        }
-        
-        setFilters(newFilterData);
-        setFormData(newFilterData);
+        });
     }
+
+    if (loading) return <Loading />;
 
     return (
         <div className='w-52 p-2'>
             <h2 className="font-semibold text-xl" >Filter Letters</h2>
             <label className="block font-semibold text-lg">Select letter:</label>
-            <select id='selectedLetter' className="block w-20 bg-slate-200 rounded-lg font-medium" value={formData.selectedLetter} onChange={(e) => changeHandler(e)}>
+            <select id='selectedLetter'
+                className="block w-20 bg-slate-200 rounded-lg font-medium"
+                value={filters.selectedLetter}
+                onChange={(e) => changeHandler(e)}>
                 <option value="">all</option>
                 {availableLetters.map((i) => {
                     const letter = i.toLowerCase();
@@ -53,17 +59,20 @@ function Filter({ setFilters, availableLetters, availableFamilies, maxPrice }) {
             </select>
             <label className="block font-semibold text-lg" >Select font families:</label>
             {availableFamilies.map((i) =>
-                <Checkbox key={i} value={i} selectedFamilies={formData.selectedFamilies} changeHandler={changeHandler} />
+                <Checkbox key={i} value={i} selectedFamilies={filters.selectedFamilies} changeHandler={changeHandler} />
             )}
             <label>Select case:</label>
-            <select id='selectedCase' className="block w-20 bg-slate-200 rounded-lg font-medium" value={formData.selectedCase} onChange={(e) => changeHandler(e)}>
+            <select id='selectedCase'
+                className="block w-20 bg-slate-200 rounded-lg font-medium"
+                value={filters.selectedCase}
+                onChange={(e) => changeHandler(e)}>
                 <option value="">both</option>
                 <option value='upper'>upper</option>
                 <option value='lower'>lower</option>
             </select>
             <label className="block font-semibold text-lg" >Price:</label>
-            range: 0 - {formData.selectedMaxPrice}
-            <input id='selectedMaxPrice' type='range' min="0" max={maxPrice} value={formData.selectedMaxPrice} onChange={(e) => changeHandler(e)} />
+            range: 0 - {filters.selectedMaxPrice}
+            <input id='selectedMaxPrice' type='range' min="0" max={maxPrice} value={filters.selectedMaxPrice} onChange={(e) => changeHandler(e)} />
         </div>
     );
 }
