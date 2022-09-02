@@ -21,7 +21,7 @@ function CartContextProvider({ children }) {
     function deleteItem(id) {
         setCart((currentCart) => {
             const newCart = currentCart.filter((i) =>
-                i.id !== id );
+                i.id !== id);
 
             localStorage.cart = JSON.stringify(newCart);
             return newCart;
